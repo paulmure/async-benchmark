@@ -1,5 +1,8 @@
 
-go_files := $(wildcard go/*.go)
+.PHONY: go_clean go
 
-go: $(go_files)
+go:
 	cd go; go build
+
+go_clean:
+	cd go; rm go
