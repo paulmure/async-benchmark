@@ -44,8 +44,11 @@ plt.xlabel('Thread Count')
 plt.ylabel('Runtime (seconds)')
 plt.title('Async Benchmark')
 
-plt.plot(thread_counts, go_times, color='blue', label="Go")
-plt.plot(thread_counts, rust_times, color='orange', label="Rust")
+plt.xscale("log")
+plt.yscale("log")
+
+plt.plot(thread_counts, list(map(lambda x: x - 1, go_times)), color='blue', label="Go")
+plt.plot(thread_counts, list(map(lambda x: x - 1, rust_times)), color='orange', label="Rust")
 
 plt.legend()
 plt.savefig('runtime.png')
