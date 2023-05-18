@@ -1,7 +1,8 @@
 use clap::Parser;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use tokio::{
     spawn,
+    sync::Mutex,
     time::{sleep, Duration},
 };
 
@@ -12,7 +13,7 @@ struct Cli {
 
 async fn wait_inc(ctr: Arc<Mutex<i32>>) {
     sleep(Duration::from_secs(1)).await;
-    let mut num = ctr.lock().unwrap();
+    let mut num = ctr.lock().await;
     *num += 1;
 }
 
@@ -29,7 +30,7 @@ async fn main() {
     futures::future::join_all(handles).await;
 
     {
-        let num = counter.lock().unwrap();
+        let num = counter.lock().await;
         assert_eq!(*num, args.num_threads);
     }
 }
