@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"sync"
 	"time"
 )
@@ -24,6 +25,8 @@ func main() {
 	numThreads := flag.Int("numThreads", 100, "Number of async \"threads\" to use")
 	flag.Parse()
 
+	start_time := time.Now()
+
 	ctr := Counter{ctr: 0}
 	var wg sync.WaitGroup
 
@@ -40,4 +43,7 @@ func main() {
 	if ctr.ctr != *numThreads {
 		panic("Counter mismatch!")
 	}
+
+	duration := time.Since(start_time)
+	fmt.Println(duration.Seconds())
 }

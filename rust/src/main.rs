@@ -6,7 +6,7 @@ use async_io::Timer;
 use smol::lock::Mutex;
 use smol::spawn;
 use std::sync::Arc;
-use std::time::Duration;
+use std::time::{Duration, SystemTime};
 
 // Tokio version
 // use std::sync::Arc;
@@ -69,6 +69,7 @@ async fn wait_inc(ctr: Arc<Mutex<i32>>) {
 // }
 
 fn main() {
+    let start = SystemTime::now();
     smol::block_on(async {
         let args = Cli::parse();
         let counter = Arc::new(Mutex::new(0));
@@ -85,4 +86,7 @@ fn main() {
             assert_eq!(*num, args.num_threads);
         }
     });
+    let end = SystemTime::now();
+    let duration = end.duration_since(start).unwrap();
+    println!("{}", duration.as_secs_f64());
 }

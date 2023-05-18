@@ -1,23 +1,24 @@
 import os
 import sys
-import time
-import matplotlib.pyplot as plt
+import pandas as pd
 
 file_path = os.path.realpath(__file__)
 cwd = os.path.dirname(file_path)
 
 n = int(sys.argv[1])
 
+
+def parse_runtime(cmd):
+    out = os.popen(cmd).read()
+    return float(out)
+
+
 def test_go(num_threads):
-    start = time.time()
-    os.system(f'{cwd}/go/go -numThreads {num_threads}')
-    return time.time() - start
+    return parse_runtime(f'{cwd}/go/go -numThreads {num_threads}')
 
 
 def test_rust(num_threads):
-    start = time.time()
-    os.system(f'{cwd}/rust/target/release/rust {num_threads}')
-    return time.time() - start
+    return parse_runtime(f'{cwd}/rust/target/release/rust {num_threads}')
 
 
 thread_counts = []
@@ -40,15 +41,10 @@ for i in range(n):
 
     print()
 
-plt.xlabel('Thread Count')
-plt.ylabel('Runtime (seconds)')
-plt.title('Async Benchmark')
+df = pd.DataFrame()
 
-plt.xscale("log")
-plt.yscale("log")
+df['ThreadCount'] = thread_counts
+df['Go'] = go_times
+df['Rust'] = rust_times
 
-plt.plot(thread_counts, list(map(lambda x: x - 1, go_times)), color='blue', label="Go")
-plt.plot(thread_counts, list(map(lambda x: x - 1, rust_times)), color='orange', label="Rust")
-
-plt.legend()
-plt.savefig('runtime.png')
+df.to_csv('data.csv')
