@@ -2,6 +2,9 @@ import os
 import sys
 import pandas as pd
 
+BENCHMARK = 'channel'
+# BENCHMARK = 'mutex'
+
 file_path = os.path.realpath(__file__)
 cwd = os.path.dirname(file_path)
 
@@ -14,11 +17,11 @@ def parse_runtime(cmd):
 
 
 def test_go(num_threads):
-    return parse_runtime(f'{cwd}/go/mutex/mutex -numThreads {num_threads}')
+    return parse_runtime(f'{cwd}/go/{BENCHMARK}/{BENCHMARK} -numThreads {num_threads}')
 
 
 def test_rust(num_threads):
-    return parse_runtime(f'{cwd}/rust/mutex/target/release/mutex {num_threads}')
+    return parse_runtime(f'{cwd}/rust/{BENCHMARK}/target/release/{BENCHMARK} {num_threads}')
 
 
 thread_counts = []
