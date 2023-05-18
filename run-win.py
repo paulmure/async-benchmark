@@ -10,13 +10,13 @@ n = int(sys.argv[1])
 
 def test_go(num_threads):
     start = time.time()
-    os.system(f'{cwd}/go/go -numThreads {num_threads}')
+    os.system(f'{cwd}/go/go.exe -numThreads {num_threads}')
     return time.time() - start
 
 
 def test_rust(num_threads):
     start = time.time()
-    os.system(f'{cwd}/rust/target/release/rust {num_threads}')
+    os.system(f'{cwd}/rust/target/release/rust.exe {num_threads}')
     return time.time() - start
 
 
