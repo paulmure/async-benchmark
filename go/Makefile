@@ -1,8 +1,8 @@
 
-.PHONY: go_clean go
+include go/mutex/Makefile
 
-go:
-	cd go; go build
+.PHONY: go go_clean
 
-go_clean:
-	cd go; rm go
+go: go_mutex
+
+go_clean: go_mutex_clean

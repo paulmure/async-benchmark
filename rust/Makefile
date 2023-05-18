@@ -1,5 +1,4 @@
 
-.PHONY: rust
+rust: rust_mutex
 
-rust:
-	cd rust; cargo build --release
+include rust/mutex/Makefile

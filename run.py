@@ -14,11 +14,11 @@ def parse_runtime(cmd):
 
 
 def test_go(num_threads):
-    return parse_runtime(f'{cwd}/go/go -numThreads {num_threads}')
+    return parse_runtime(f'{cwd}/go/mutex/mutex -numThreads {num_threads}')
 
 
 def test_rust(num_threads):
-    return parse_runtime(f'{cwd}/rust/target/release/rust {num_threads}')
+    return parse_runtime(f'{cwd}/rust/mutex/target/release/mutex {num_threads}')
 
 
 thread_counts = []
