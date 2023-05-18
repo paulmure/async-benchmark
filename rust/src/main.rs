@@ -1,10 +1,27 @@
 use clap::Parser;
+use futures::future::join_all;
+
+// Smol version
+use async_io::Timer;
+use smol::lock::Mutex;
+use smol::spawn;
 use std::sync::Arc;
-use tokio::{
-    spawn,
-    sync::Mutex,
-    time::{sleep, Duration},
-};
+use std::time::Duration;
+
+// Tokio version
+// use std::sync::Arc;
+// use tokio::{
+//     spawn,
+//     sync::Mutex,
+//     time::{sleep, Duration},
+// };
+
+// Async_std version
+// use async_std::{
+//     sync::{Arc, Mutex},
+//     task::{sleep, spawn},
+// };
+// use std::time::Duration;
 
 #[derive(Parser)]
 struct Cli {
@@ -12,25 +29,60 @@ struct Cli {
 }
 
 async fn wait_inc(ctr: Arc<Mutex<i32>>) {
-    sleep(Duration::from_secs(1)).await;
-    let mut num = ctr.lock().await;
+    // not smol
+    // sleep(Duration::from_secs(1)).await;
+
+    // // smol
+    Timer::after(Duration::from_secs(1)).await;
+
+    // tokio
+    // let mut num = ctr.lock().await;
+
+    // smol and async_std
+    let mut num = ctr.lock_arc().await;
+
     *num += 1;
 }
 
-#[tokio::main]
-async fn main() {
-    let args = Cli::parse();
-    let counter = Arc::new(Mutex::new(0));
-    let mut handles = vec![];
+// #[async_std::main]
+// // #[tokio::main]
+// async fn main() {
+//     let args = Cli::parse();
+//     let counter = Arc::new(Mutex::new(0));
+//     let mut handles = vec![];
 
-    for _ in 0..args.num_threads {
-        handles.push(spawn(wait_inc(counter.clone())))
-    }
+//     for _ in 0..args.num_threads {
+//         handles.push(spawn(wait_inc(counter.clone())));
+//     }
 
-    futures::future::join_all(handles).await;
+//     join_all(handles).await;
 
-    {
-        let num = counter.lock().await;
-        assert_eq!(*num, args.num_threads);
-    }
+//     {
+//         // tokio
+//         // let num = counter.lock().await;
+
+//         // async_std
+//         let num = counter.lock_arc().await;
+
+//         assert_eq!(*num, args.num_threads);
+//     }
+// }
+
+fn main() {
+    smol::block_on(async {
+        let args = Cli::parse();
+        let counter = Arc::new(Mutex::new(0));
+        let mut handles = vec![];
+
+        for _ in 0..args.num_threads {
+            handles.push(spawn(wait_inc(counter.clone())));
+        }
+
+        join_all(handles).await;
+
+        {
+            let num = counter.lock_arc().await;
+            assert_eq!(*num, args.num_threads);
+        }
+    });
 }
