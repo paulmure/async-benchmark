@@ -1,5 +1,5 @@
 function test_mpsc(num_threads::Int)
-    c = Channel(Inf)
+    c::Channel{Int} = Channel{Int}(Inf)
     for _ = 1:num_threads
         schedule(@task begin
             sleep(1)
