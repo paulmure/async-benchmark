@@ -17,7 +17,7 @@ class MpscChannel
         }
         for (var i = 0; i < numThreads; i++)
         {
-            Task.WaitAll(new Task[] { reader.ReadAsync().AsTask() });
+            reader.ReadAsync().AsTask().Wait();
         }
     }
     static void Main(string[] args)

@@ -15,7 +15,7 @@ let channel (numThreads: int) =
         |> ignore
 
     for _ = 1 to numThreads do
-        Task.WaitAll([| r.ReadAsync().AsTask() |]: Task array)
+        r.ReadAsync().AsTask().Wait()
 
 let stopWatch = System.Diagnostics.Stopwatch.StartNew()
 channel (System.Environment.GetCommandLineArgs()[2] |> int)
