@@ -4,7 +4,9 @@ class MpscChannel
 {
     static private async void channel(int numThreads)
     {
-        var chan = Channel.CreateUnbounded<int>();
+        var options = new UnboundedChannelOptions();
+        options.SingleReader = true;
+        var chan = Channel.CreateUnbounded<int>(options);
         var reader = chan.Reader;
         var writer = chan.Writer;
         for (var i = 0; i < numThreads; i++)
