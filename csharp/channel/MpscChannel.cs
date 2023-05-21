@@ -26,7 +26,7 @@ class MpscChannel
         var numThreads = 0;
         try
         {
-            numThreads = Int32.Parse(args[1]);
+            numThreads = Int32.Parse(args[0]);
         }
         catch (Exception e)
         {
@@ -34,6 +34,6 @@ class MpscChannel
         }
         channel(numThreads);
         stopWatch.Stop();
-        Console.WriteLine(stopWatch.Elapsed.TotalMilliseconds);
+        Console.WriteLine($"{stopWatch.Elapsed.TotalMilliseconds / 1000}s");
     }
 }

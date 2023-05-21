@@ -3,7 +3,7 @@ open System.Threading.Tasks
 
 // mpsc
 let channel (numThreads: int) =
-    let c: Channel<int> = Channel.CreateUnbounded(UnboundedChannelOptions())
+    let c: Channel<int> = Channel.CreateUnbounded(UnboundedChannelOptions(SingleReader=true))
     let r = c.Reader
     let w = c.Writer
 
@@ -20,4 +20,4 @@ let channel (numThreads: int) =
 let stopWatch = System.Diagnostics.Stopwatch.StartNew()
 channel (System.Environment.GetCommandLineArgs()[2] |> int)
 stopWatch.Stop()
-printfn "%fs" stopWatch.Elapsed.TotalMilliseconds
+printfn "%fs" (stopWatch.Elapsed.TotalMilliseconds/1000.0)
