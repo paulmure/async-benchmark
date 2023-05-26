@@ -3,8 +3,7 @@ open Event
 
 let worker chan =
   delay 1.0 ;
-  let _ = send chan 1 in
-  ()
+  sync @@ send chan 1
 
 let test n =
   let chan = new_channel () in
@@ -13,7 +12,7 @@ let test n =
     ()
   done ;
   for _ = 1 to n do
-    let _ = receive chan in ()
+    let _ = sync @@ receive chan in ()
   done
 
 let () =

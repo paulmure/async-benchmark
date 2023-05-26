@@ -3,9 +3,9 @@ open Event
 open Semaphore.Counting
 
 let worker chan sem =
-  let _ = send chan 1 in
+  sync @@ send chan 1;
   delay 1.0 ;
-  let _ = receive chan in
+  let _ = sync @@ receive chan in
   release sem
 
 let test n =
