@@ -1,5 +1,0 @@
-# dune init project Channel
-# OCAMLPARAM: unset
-# Shared cache: disabled
-# Workspace root: /root/code-base/ml/ocaml
-# Auto-detected concurrency: 8
