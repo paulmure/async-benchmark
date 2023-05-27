@@ -29,9 +29,9 @@ func main() {
 
 	ctr := Counter{ctr: 0}
 	var wg sync.WaitGroup
+	wg.Add(*numThreads)
 
 	for i := 0; i < *numThreads; i++ {
-		wg.Add(1)
 		go func() {
 			defer wg.Done()
 			ctr.WaitInc()
