@@ -17,7 +17,7 @@ func main() {
 
 	start_time := time.Now()
 
-	c := make(chan int)
+	c := make(chan int, *numThreads)
 
 	for i := 0; i < *numThreads; i++ {
 		go WaitInc(c)
