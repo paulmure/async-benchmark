@@ -11,6 +11,6 @@ def main (argv : List String): IO Unit := do
     let a <- α 
     return List.cons a β) List.nil
   let ts <- ts
-  let _ <- ts.forM (fun t => do
-    let _ := Task.get t
+  let _ <- ts.forM ( do
+    let _ := Task.get ·  
   )
