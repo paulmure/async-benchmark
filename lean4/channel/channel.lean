@@ -7,8 +7,7 @@ def main (argv : List String): IO Unit := do
   let n := argv.head!.toNat!
   let threads := mkArray n (IO.asTask task)
   let r := threads.forM (fun t => do
-    let q <- t
-    let _ := Task.get q
+    let _ <- t
   )
   r
   threads.forM (fun _ => do
