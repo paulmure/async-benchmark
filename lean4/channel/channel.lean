@@ -5,11 +5,7 @@ def main (argv : List String): IO Unit := do
     chan.send 1
   )
   let n := argv.head!.toNat!
-  let threads := mkArray n (IO.asTask task)
-  let r := threads.forM (fun t => do
-    let _ <- t
-  )
-  r
-  threads.forM (fun _ => do
+  for _ in mkArray n 0 do 
+    let _ <- IO.asTask task
+  for _ in mkArray n 0 do 
     let _ <- chan.sync.recv?
-  )
