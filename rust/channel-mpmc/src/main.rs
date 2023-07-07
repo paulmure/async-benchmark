@@ -18,7 +18,7 @@ async fn wait_inc(tx: Sender<i32>, rx: Receiver<i32>) {
 
 fn main() {
     let start = SystemTime::now();
-    smol::block_on(async {
+    smol::block_on({
         let args = Cli::parse();
         let (tx, rx): (Sender<i32>, Receiver<i32>) = unbounded();
         let mut handles = vec![];
@@ -27,7 +27,7 @@ fn main() {
             handles.push(spawn(wait_inc(tx.clone(), rx.clone())));
         }
 
-        join_all(handles).await;
+        join_all(handles)
     });
     let end = SystemTime::now();
     let duration = end.duration_since(start).unwrap();
